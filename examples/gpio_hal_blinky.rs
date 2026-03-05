@@ -1,12 +1,11 @@
 #![no_main]
 #![no_std]
 
-#[allow(unused)]
-use panic_halt;
+use panic_halt as _;
 
 use nucleo_f103rb as board;
 
-use board::hal::{pac, prelude::*, timer::Timer};
+use board::hal::{pac, prelude::*};
 use cortex_m_rt::entry;
 
 use nb::block;
@@ -16,17 +15,17 @@ fn main() -> ! {
     let dp = pac::Peripherals::take().unwrap();
 
     let mut flash = dp.FLASH.constrain();
-    let mut rcc = dp.RCC.constrain();
-
+    let rcc = dp.RCC.constrain();
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let mut gpioa = dp.GPIOA.split(&mut rcc.apb2);
+    let mut gpioa = dp.GPIOA.split();
 
     let mut led = gpioa.pa5.into_push_pull_output(&mut gpioa.crl);
-    let mut timer = Timer::tim2(dp.TIM2, &clocks, &mut rcc.apb1).start_count_down(2.hz());
+    let mut timer = dp.TIM2.counter_ms(&clocks);
+    timer.start(2000u32.millis()).unwrap();
 
     loop {
-        led.toggle().ok();
+        led.toggle();
         block!(timer.wait()).unwrap();
     }
 }

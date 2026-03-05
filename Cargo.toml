@@ -1,5 +1,5 @@
 [package]
-edition = "2018"
+edition = "2021"
 authors = ["Daniel Egger <daniel@eggers-club.de>"]
 categories = [
     "embedded",
@@ -19,20 +19,16 @@ version = "0.3.0"
 repository = "https://github.com/therealprof/nucleo-f103rb"
 
 [dependencies]
-bare-metal = "0.2"
-cortex-m = "0.6"
-nb = "0.1"
-cortex-m-rt = "0.6"
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
 
 [dependencies.stm32f1xx-hal]
 features = ["stm32f103", "medium", "rt"]
-version = "0.5"
+version = "0.10"
 
 [dev-dependencies]
 panic-halt = "0.2"
-numtoa = "0.2"
-vcell = "0.1"
-volatile-register = "0.2"
+nb = "1.1"
 
 [profile.dev]
 debug = true
